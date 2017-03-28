@@ -6,8 +6,8 @@ int main(){
     int n,i;
     int score,num;
     scanf("%d",&n);
-    int* p = (int*)malloc(sizeof(int)*n);
-    memset(p,0,sizeof(int)*n);
+    int* p = (int*)malloc(sizeof(int)*(n+1));
+    memset(p,0,sizeof(int)*(n+1));
     for(i = 0;i < n;i++){
         scanf("%d%d",&num,&score);
         p[num] += score;
