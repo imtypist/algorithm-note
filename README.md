@@ -1,6 +1,6 @@
 # algorithm-note
 
-- 推荐使用 **code::blcoks**, **C-Free**, **dev-c++**
+- 推荐使用 **code::blocks**, **C-Free**, **dev-c++**
 - 目录结构 `评测系统名/题号`
 
 ### 算法归纳
@@ -90,6 +90,76 @@ LL binaryPow(LL a, LL b, LL m){
     a = a * a % m;
     b >>= 1;
   }
+}
+```
+
+#### two pointers
+
+体会一下下面这段代码，寻找`a[i]+a[j]=M`的组合。
+
+```c++
+// a[x]有序
+while(i < j){
+    if(a[i] + a[j] == M){
+        cout << i,j << endl;
+      	i++;
+      	j--;
+    }else if(a[i] + a[j] < M){
+        i++;
+    }else{
+        j--;
+    }
+}
+```
+
+- 2-路归并排序
+
+
+```c++
+// recursive
+void mergeSort(int a[], int left, int right){
+    if(left < right){
+        int mid = (left+right)/2;
+      	mergeSort(a, left, mid);
+      	mergeSort(a, mid+1, right);
+      	merge(a, left, mid, mid+1, right);// 合并[left,mid],[mid+1,right]
+    }
+}
+
+// 非递归
+void mergeSort(int a[]){
+    for(int step = 2;step /2 <= n;step *= 2){
+        for(int i = 1;i <= n;i += step){
+            int mid = i + step / 2 - 1;
+          	if(mid + 1 <= n){
+                merge(a, i, mid, mid+1, min(i+step-1,n));
+            }
+        }
+    }
+}
+```
+
+- 快速排序
+
+```c++
+void quickSort(int a[], int left, int right){
+    if(left < right){
+        int pos = partition(a, left, right);
+      	quickSort(a, left, pos);
+      	quickSort(a, pos+1, right);
+    }
+}
+
+int partition(int a[], int left, int right){
+  	int temp = a[left];
+    while(left < right){
+        while(left < right && a[right] > temp) right--;
+      	a[left] = a[right];
+      	while(left < right && a[left] <= temp) left++;
+      	a[right] = a[left];
+    }
+  	a[left] = temp;
+  	return left;
 }
 ```
 
