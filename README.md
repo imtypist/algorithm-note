@@ -163,3 +163,80 @@ int partition(int a[], int left, int right){
 }
 ```
 
+### 数学问题
+
+#### 数字黑洞
+
+主要是`to_array`、`to_number`函数的编写
+
+#### 最大公约数和最小公倍数
+
+```c++
+// 最大公约数gcd
+int gcd(int a, int b){
+    if(b == 0) return a;
+  	else return gcd(b, a%b);
+}
+
+// 最小公倍数
+int lcm(int a, int b){
+    return a / gcd(a,b) * b; // 防止a*b溢出，所以写成a/gcd*b
+}
+```
+
+#### 素数
+
+```c++
+// 1不是素数
+bool isPrime(int a){
+  	if(a <= 1) return false;
+  	int sqr = (int)sqrt(1.0*a);
+    for(int i = 2;i <= sqr;i++){
+        if(a % i == 0) return false;
+    }
+  return true;
+}
+```
+
+- 埃氏筛法-寻找素数表
+
+```c++
+// 时间复杂度O(nloglogn)
+const int maxn = 101; // 表长
+int prime[maxn], pNum = 0;
+bool p[maxn] = {0};
+void Find_Prime(){
+    for(int i = 2;i < maxn;i++){
+        if(p[i] == false){
+          	prime[pNum++] = i;
+            for(int j = i + i;j < maxn;j += i){
+                p[j] = true;
+            }
+        }
+    }
+}
+```
+
+#### 质因子分解
+
+```c++
+struct factor{
+    int x, cnt; // x为质因子，cnt为其个数
+}fac[10];
+
+if(n % prime[i] == 0){
+    fac[num].x = prime[i];
+  	fac[num].cnt = 0;
+  	while(n % prime[i] == 0){
+        fac[num].cnt++;
+      	n /= prime[i];
+    }
+  	num++;
+}
+
+if(n != 1){
+    fac[num].x = n;
+  	fac[num++].cnt = 1;
+}
+```
+
