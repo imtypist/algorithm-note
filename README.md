@@ -276,7 +276,7 @@ int cal(int n, int p){
 
 直接按定义算容易超出数据范围，即使是`long long`类型也只能接受`n<=20`的运算，不做阐述。所以利用下面这个公式可以写出递归函数。
 
-![](http://latex.codecogs.com/gif.latex?C_{n}^{m}= C_{n-1}^{m}+C_{n-1}^{m-1})
+![](./img/1.gif)
 
 ```c++
 // 递归
