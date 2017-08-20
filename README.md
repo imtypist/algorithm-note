@@ -240,3 +240,82 @@ if(n != 1){
 }
 ```
 
+#### 大整数运算
+
+```c++
+// big number结构体表示
+struct bign{
+    int d[1000];
+  	int len;
+  	bign(){ // 结构体的构造函数
+        memset(d,0,sizeof(d));
+      	len = 0;
+    }
+}
+```
+
+- 高精度（大整数）加减法
+
+#### 组合数
+
+- n!中有多少个质因子p
+
+```c++
+// (n/p + n / p^2 + n / p^3 + ···)
+int cal(int n, int p){
+    int ans = 0;
+  	while(n){
+        ans += n / p;
+      	n /= p;
+    }
+  	return ans;
+}
+```
+
+- 组合数的计算
+
+直接按定义算容易超出数据范围，即使是`long long`类型也只能接受`n<=20`的运算，不做阐述。所以利用下面这个公式可以写出递归函数。
+$$
+C_{n}^{m}= C_{n-1}^{m}+C_{n-1}^{m-1}
+$$
+
+```c++
+// 递归
+long long res[67][67] = {0};
+long long C(long long n, long long m){
+    if(m == 0 || m == n) return 1;
+  	if(res[n][m] != 0) return res[n][m]; // 避免重复计算
+  	return res[n][m] = C(n-1,m) + C(n-1,m-1);
+}
+
+// 递推
+const int n = 60;
+void calC(){
+    for(int i = 1;i <= n;i++){
+        res[i][0] = res[i][i] = 1;
+    }
+  	for(int i = 2;i <= n;i++){
+        for(int j = 0;j <= i/2;j++){
+            res[i][j] = res[i-1][j] + res[i-1][j-1];
+          	res[i][i-j] = res[i][j];
+        }
+    }
+}
+```
+
+或者另法
+$$
+C_{n}^{m}= \frac{n!}{m!(n-m)!}=\frac{(n-m+1)(n-m+2)...(n-m+n)}{1*2*3*...*m}
+$$
+
+```c++
+// O(m)时间复杂度，excellent
+long long C(long long n, long long m){
+    long long ans = 1;
+  	for(long long i = 1;i <= m; i++){
+        ans = ans * (n-m+i) / i; // 一定要先乘再除，保证整除
+    }
+  	return ans;
+}
+```
+
