@@ -317,3 +317,25 @@ long long C(long long n, long long m){
 }
 ```
 
+### C++标准模板库STL
+
+**注意：涉及到的区间问题通通都是左闭右开**
+
+- vector `vector<typename> a;`
+
+
+- set `set<typename> a;`
+- string `string str;`
+- map `map<typename1, typename2> mmp;`
+- queue `queue<typename> name;`
+- priority_queue `priority_queue<typename> name;` 重载
+- stack `stack<typename> name;`
+- pair `#include<utility> 可以看作是内部有两个元素的结构体 pair<typename1,typename2> name;`
+- algorithm头文件下的常用函数
+  - max,min,abs(abs参数必须是整数，浮点数用math头文件下的fabs)
+  - swap(x,y)
+  - reverse
+  - next_permutation(给出一个序列在全排列中的下一个序列)
+  - fill
+  - sort
+  - lower_bound,upper_bound(用在有序数组或容器中)
