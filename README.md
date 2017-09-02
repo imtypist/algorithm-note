@@ -277,8 +277,8 @@ if(n != 1){
 // big number结构体表示
 struct bign{
     int d[1000];
-  	int len;
-  	bign(){ // 结构体的构造函数
+    int len;
+    bign(){ // 结构体的构造函数
         memset(d,0,sizeof(d));
       	len = 0;
     }
@@ -423,4 +423,3 @@ void BFS(int s){
 
 - 计算日期差值可以定义一个二维数组存放月份天数`int month[13][2]`，下标作为月份，每一维存放平年和闰年的天数，`{{0,0},{31,31},{28,29},...}`，闰年`(year % 4 == 0 && year % 100 != 0 || year % 400 == 0)`
 - 回文串判定`str[i] == str[len - i - 1]`
-- ​
