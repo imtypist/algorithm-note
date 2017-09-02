@@ -1,5 +1,7 @@
 # algorithm-note
 
+![](./img/logo.png)
+
 - 推荐使用 **code::blocks**, **C-Free**, **dev-c++**
 - 目录结构 `评测系统名/题号`
 
@@ -8,7 +10,36 @@
 #### 排序
 
 - 选择排序
+
+```c++
+void selectSort(){
+ for(int i = 0;i < n;i++){
+     int k = i;
+     for(int j = i;i < n;j++){
+         if(a[j] < a[k]){
+             k = j;
+         }
+     }
+     swap(a[i],a[k]);
+ }
+}
+```
+
 - 插入排序
+
+```c++
+void insertSort(){
+    for(int i = 1;i < n;i++){
+        int temp = a[i], j = i;
+        while(j > 0 && temp < a[j-1]){
+            a[j] = a[j-1];
+            j--;
+        }
+        a[j] == temp;
+    }
+}
+```
+
 - 排序题与sort函数的应用
 
 #### 散列
@@ -388,3 +419,8 @@ void BFS(int s){
 }
 ```
 
+### tips
+
+- 计算日期差值可以定义一个二维数组存放月份天数`int month[13][2]`，下标作为月份，每一维存放平年和闰年的天数，`{{0,0},{31,31},{28,29},...}`，闰年`(year % 4 == 0 && year % 100 != 0 || year % 400 == 0)`
+- 回文串判定`str[i] == str[len - i - 1]`
+- ​
