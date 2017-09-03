@@ -83,12 +83,67 @@ int main(){
 
 - n皇后问题
 
+```c++
+void generateP(int index){
+    if(index == n+1){
+        count++;
+        return;
+    }
+    for(int i = 1;i <= n;i++){
+        if(hashTable[i] == false){
+            bool flag = true;
+            for(int pre = 1;pre < index;pre++){
+                if(abs(pre-index) == abs(i-p[pre])){
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag){
+                p[index] = i;
+                hashTable[i] = true;
+                generateP(index+1);
+                hashTable[i] = false;
+            }
+        }
+    }
+}
+```
+
 #### 贪心
 
 - 简单贪心
 - 区间贪心
 
+```c++
+struct Inteval{
+    int x,y;
+}I[maxn];
+bool cmp(Inteval a, Inteval b){
+    if(a.x != b.x) return a.x > b.x;
+    else return a.y < b.y;
+}
+// 关键代码
+sort(I, I+n, cmp);
+int ans = 1, lastX = I[0].x;
+for(int i = 1;i < n;i++){
+    if(I[i].y <= lastX){
+        lastX = I[i].x;
+        ans++; // ans保留不相交区间条数
+    }
+}
+```
+
 #### 二分
+
+```c++
+// 基本框架
+int mid;
+while(left < right){
+    mid = (left + right) / 2;
+    // 与a[mid]作比较
+    // 自定义处理逻辑
+}
+```
 
 - 二分查找
 - 二分法拓展
@@ -133,8 +188,8 @@ LL binaryPow(LL a, LL b, LL m){
 while(i < j){
     if(a[i] + a[j] == M){
         cout << i,j << endl;
-      	i++;
-      	j--;
+        i++;
+        j--;
     }else if(a[i] + a[j] < M){
         i++;
     }else{
@@ -150,14 +205,14 @@ while(i < j){
 // recursive
 void mergeSort(int a[], int left, int right){
     if(left < right){
-        int mid = (left+right)/2;
+        int mid = (left + right) / 2;
       	mergeSort(a, left, mid);
       	mergeSort(a, mid+1, right);
       	merge(a, left, mid, mid+1, right);// 合并[left,mid],[mid+1,right]
     }
 }
 
-// 非递归
+// 非递归*
 void mergeSort(int a[]){
     for(int step = 2;step /2 <= n;step *= 2){
         for(int i = 1;i <= n;i += step){
@@ -167,6 +222,20 @@ void mergeSort(int a[]){
             }
         }
     }
+}
+
+void merge(int a[], int L1, int R1, int L2, int R2){
+    int i = L1, j = L2;
+    int temp[maxn], index = 0;
+    while(i <= R1 && j <= R2){
+        if(a[i] <= a[j]){
+            temp[index++] = a[i++];
+        }else{
+            temp[index++] = a[j++];
+        }
+    }
+    while(i <= R1) temp[index++] = a[i++];
+    while(j <= R2) temp[index++] = a[j++];
 }
 ```
 
@@ -192,6 +261,27 @@ int partition(int a[], int left, int right){
   	a[left] = temp;
   	return left;
 }
+
+// =>randPartition
+#include <stdlib.h>
+#include <time.h>
+int main(){
+    srand((unsigned)time(NULL));
+    // ...
+}
+int randPartition(int a[], int left, int right){
+    int p = (round(rand()*1.0 / RAND_MAX * (right - left)) + left);
+    swap(a[p],a[left]);
+    int temp = a[left];
+    while(left < right){
+        while(left < right && temp < a[right]) right--;
+        a[left] = a[right];
+        while(left < right && temp >= a[left]) left++;
+        a[right] = a[left];
+    }
+    a[left] = temp;
+    return left;
+}
 ```
 
 ### 数学问题
@@ -199,6 +289,23 @@ int partition(int a[], int left, int right){
 #### 数字黑洞
 
 主要是`to_array`、`to_number`函数的编写
+
+```c++
+void to_array(int n, int num[]){
+    for(int i = 0;i < 4;i++){
+        num[i] = n % 10;
+        n /= 10;
+    }
+}
+
+int to_number(int num[]){
+    int sum = 0;
+    for(int i = 0;i < 4;i++){
+        sum = num[i] + sum * 10;
+    }
+    return sum;
+}
+```
 
 #### 最大公约数和最小公倍数
 
@@ -279,13 +386,43 @@ struct bign{
     int d[1000];
     int len;
     bign(){ // 结构体的构造函数
-        memset(d,0,sizeof(d));
+        memset(d,0,sizeof(d)); // 相当于高位自动填充0
       	len = 0;
     }
 }
 ```
 
 - 高精度（大整数）加减法
+
+```c++
+bign add(bign a, bign b){
+    bign c;
+    int carry = 0;
+    for(int i = 0;i < a.len || i < b.len;i++){
+        int temp = a.d[i] + b.d[i] + carry;
+        c.d[c.len++] = temp % 10;
+        carry = temp / 10;
+    }
+    if(carry != 0){
+        c.d[c.len++] = carry;
+    }
+    return c;
+}
+bign sub(bign a, bign b){ // a>=b
+    bign c;
+    for(int i = 0;i < a.len || i < b.len;i++){
+        if(a.d[i] < b.d[i]){
+            a.d[i+1]--;
+            a.d[i] += 10;
+        }
+        c.d[c.len++] = a.d[i] - b.d[i];
+    }
+    while(c.len > 1 && c.d[c.len - 1] == 0){
+        c.len--; // 至少要有一位
+    }
+    return c;
+}
+```
 
 #### 组合数
 
@@ -300,6 +437,12 @@ int cal(int n, int p){
       	n /= p;
     }
   	return ans;
+}
+// 若要求n!末尾有几个零，可以转换为有多少个质因子5的问题
+// 递归版本
+int cal(int n, int p){
+    if(n < p) return 0;
+    return n / p + cal(n / p, p);
 }
 ```
 
@@ -352,11 +495,61 @@ long long C(long long n, long long m){
 
 **注意：涉及到的区间问题通通都是左闭右开**
 
-- vector `vector<typename> a;`
+- vector `#include<vector> using namespace std;`
 
 
-- set `set<typename> a;`
-- string `string str;`
+```c++
+vector<typename> a; //typename也可以是stl容器，比如
+vector< vector<int> > name; //可以理解为二维数组，注意空格
+vector<int>::iterator it; // 迭代器，可以理解为指针，使用*it可以访问元素
+for(vector<int>::iterator it = vi.begin();it != vi.end();it++){
+    // ...
+}
+// 注意：只有vector和string可以使用vi.begin()+3这样的写法
+push_back()
+pop_back()
+size()
+clear()
+insert(it, x)
+erase(it) // 删除单个 
+erase(first, last) // 删除区间，左闭右开
+```
+
+- set `#include<set> using namespace std;`
+
+```c++
+set<typename> a; // 元素自动递增排序，去除重复元素
+insert(x)
+set<int>::iterator it = st.find(x) // 返回迭代器 print *it
+erase(it)
+erase(value)
+erase(first, last)
+size()
+clear()
+```
+
+- string `#include<string> using namespace std;`
+
+```c++
+string str; // 可以用下标访问，也可以用迭代器访问
+cin >> str; cout << str; printf("%s",str.c_str()); // 输入输出
+string::iterator it;
+str3 = str1 + str2; //拼接+=，还可以比大小，比较规则是字典序
+length()/size() // 都可以，基本相同
+insert(pos, string) // 在str[pos]处插入string
+insert(it, it2, it3) // 与插入位置it，待插字符串的首位迭代器[it2,it3)，同样左闭右开
+erase(it)
+erase(first, last)
+erase(pos, length)
+clear()
+substr(pos, len)
+string::npos // find()失败的返回值
+find(str2) // 若存在，返回str2在str中第一次出现的位置
+find(str2, pos) // 指定位置
+replace(pos, len, str2)
+replace(pos, it1, it2)
+```
+
 - map `map<typename1, typename2> mmp;`
 - queue `queue<typename> name;`
 - priority_queue `priority_queue<typename> name;` 重载
