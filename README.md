@@ -550,11 +550,76 @@ replace(pos, len, str2)
 replace(pos, it1, it2)
 ```
 
-- map `map<typename1, typename2> mmp;`
-- queue `queue<typename> name;`
-- priority_queue `priority_queue<typename> name;` 重载
-- stack `stack<typename> name;`
-- pair `#include<utility> 可以看作是内部有两个元素的结构体 pair<typename1,typename2> name;`
+- map `#include<map> using namespace std;`
+
+```c++
+map<typename1, typename2> mp;// 以key的大小递增排序
+map<typename1, typename2>::iterator it;// it->first it->second
+find(key)
+erase(it)
+erase(key)
+erase(first, last)
+size()
+clear()
+```
+
+- queue `#include<queue> using namespace std;`
+
+```c++
+queue<typename> name;
+name.front(); name.back();
+push()
+pop()
+empty()
+size()
+```
+
+- priority_queue `与queue同` 
+
+```c++
+priority_queue<typename> name; // 队首元素是优先级最大的
+push()
+top()
+pop()
+empty()
+size()
+// 基本数据类型优先级设置
+priority_queue<int> q; // 等价于
+priority_queue<int, vector<int>, less<int> > q; // less表示数字大的优先级越大，greater相反
+// 结构体优先级设置
+struct fruit{
+    string name;
+    int price;
+    friend bool operator < (fruit f1, fruit f2){ // 重载 <
+        return f1.price < f2.price; // 价格高的优先级高，与sort正好相反
+        // return f1.price > f2.price; // 价格低的优先级高
+    }
+}
+```
+
+- stack `#include<stack> using namespace std;`
+
+```c++
+stack<typename> name;
+push()
+top()
+pop()
+empty()
+size()
+```
+
+- pair `#include<utility> using namespace std;`
+
+```c++
+pair<typename1,typename2> name; //可以看作是内部有两个元素的结构体
+pair<string, int> p("hh",5); // 初始化
+// 临时构建pair赋值,可以用于插入map的键值对
+pair<string, int>("hh",5);
+make_pair("hh",5);
+// 访问元素
+p.first p.second //比较大小的话先比first再比second
+```
+
 - algorithm头文件下的常用函数
   - max,min,abs(abs参数必须是整数，浮点数用math头文件下的fabs)
   - swap(x,y)
