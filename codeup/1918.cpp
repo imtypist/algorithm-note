@@ -60,20 +60,14 @@ double Cal(){
             temp1 = s.top().num;
             s.pop();
             temp.flag = true;
-            switch(cur.op){
-            case '+':
+            if(cur.op == '+')
                 temp.num = temp1 + temp2;
-                break;
-            case '-':
+            else if(cur.op == '-')
                 temp.num = temp1 - temp2;
-                break;
-            case '*':
+            else if(cur.op == '*')
                 temp.num = temp1 * temp2;
-                break;
-            case '/':
+            else
                 temp.num = temp1 / temp2;
-                break;
-            }
             s.push(temp);
         }
     }
