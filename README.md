@@ -495,7 +495,9 @@ long long C(long long n, long long m){
 
 **注意：涉及到的区间问题通通都是左闭右开**
 
-- vector `#include<vector> using namespace std;`
+使用STL库需要加一句`using namespace std;`
+
+- vector `#include <vector>`
 
 
 ```c++
@@ -515,7 +517,7 @@ erase(it) // 删除单个
 erase(first, last) // 删除区间，左闭右开
 ```
 
-- set `#include<set> using namespace std;`
+- set `#include <set>`
 
 ```c++
 set<typename> a; // 元素自动递增排序，去除重复元素
@@ -528,7 +530,7 @@ size()
 clear()
 ```
 
-- string `#include<string> using namespace std;`
+- string `#include <string>`
 
 ```c++
 string str; // 可以用下标访问，也可以用迭代器访问
@@ -550,7 +552,7 @@ replace(pos, len, str2)
 replace(pos, it1, it2)
 ```
 
-- map `#include<map> using namespace std;`
+- map `#include <map>`
 
 ```c++
 map<typename1, typename2> mp;// 以key的大小递增排序
@@ -563,7 +565,7 @@ size()
 clear()
 ```
 
-- queue `#include<queue> using namespace std;`
+- queue `#include <queue>`
 
 ```c++
 queue<typename> name;
@@ -574,7 +576,7 @@ empty()
 size()
 ```
 
-- priority_queue `与queue同` 
+- priority_queue `#include <queue>` 
 
 ```c++
 priority_queue<typename> name; // 队首元素是优先级最大的
@@ -597,7 +599,7 @@ struct fruit{
 }
 ```
 
-- stack `#include<stack> using namespace std;`
+- stack `#include <stack>`
 
 ```c++
 stack<typename> name;
@@ -608,7 +610,7 @@ empty()
 size()
 ```
 
-- pair `#include<utility> using namespace std;`
+- pair `#include <utility>或者#include <map>`
 
 ```c++
 pair<typename1,typename2> name; //可以看作是内部有两个元素的结构体
@@ -621,13 +623,13 @@ p.first p.second //比较大小的话先比first再比second
 ```
 
 - algorithm头文件下的常用函数
-  - max,min,abs(abs参数必须是整数，浮点数用math头文件下的fabs)
-  - swap(x,y)
-  - reverse
-  - next_permutation(给出一个序列在全排列中的下一个序列)
-  - fill
-  - sort
-  - lower_bound,upper_bound(用在有序数组或容器中)
+  - `max,min,abs(abs参数必须是整数，浮点数用math头文件下的fabs)`
+  - `swap(x,y)`
+  - `reverse`
+  - `next_permutation(给出一个序列在全排列中的下一个序列)`
+  - `fill`
+  - `sort`
+  - `lower_bound,upper_bound(用在有序数组或容器中)`
 
 ### 搜索
 
@@ -787,6 +789,169 @@ int kruskal(){
             最小生成树的当前边数Num_Edge加1;
             当边数Num_Edge等于顶点数减1时结束循环;
         }
+    }
+}
+```
+
+### 动态规划DP
+
+状态转移方程，以经典的数塔问题为例
+
+```c++
+// 边界
+for(int j = 1;j <= n;j++){
+    dp[n][j] = f[n][j];
+}
+// 自底向上
+for(int i = n - 1;i >= 1;i--){
+    for(int j = 1;j <= i;j++){
+        d[i][j] = max(dp[i+1][j], dp[i+1][j+1]) + f[i][j];
+    }
+}
+// print dp[1][1]
+```
+
+#### 最大连续子序列和（只考虑结尾元素）
+
+状态转移方程：`dp[i] = max{A[i], dp[i-1] + A[i]}`
+
+边界：`dp[0] = A[0]`
+
+#### 最长不下降子序列LIS（同样只考虑以A[i]结尾的情况）
+
+状态转移方程：`dp[i] = max{1, dp[j] + 1} (j = 1,2,...,i-1 && A[j] <= A[i])`
+
+```c++
+int ans = -1; // 记录最大dp
+for(int i = 1;i <= n;i++){
+    dp[i] = 1; // 初始假设每个元素自成序列
+    for(int j = 1;j <i; j++){
+        if(A[i] >= A[j] && (dp[j] + 1 > dp[i])){
+            dp[i] = dp[j] + 1;
+        }
+    }
+    ans = max(ans, dp[i]);
+}
+```
+
+#### 最长公共子序列LCS
+
+状态转移方程：`当A[i] == B[i], dp[i][j] = dp[i-1][j-1] + 1 `
+
+​                           `当A[i] != B[i], dp[i][j] = max{dp[i-1][j], dp[i][j-1]}`
+
+边界：`dp[i][0] = dp[0][j] = 0`
+
+```c++
+// 边界
+for(int i = 0;i <= lenA;i++) dp[i][0] = 0;
+for(int j = 0;j <= lenB;j++) dp[0][j] = 0;
+// 状态转移方程
+for(int i = 1;i <= lenA;i++){ // 下标从1开始
+    for(int j = 1;j <= lenB;j++){
+        if(A[i] == B[i]){
+            dp[i][j] = dp[i-1][j-1] + 1;
+        }else{
+            dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+        }
+    }
+}
+```
+
+#### 最长回文子串
+
+状态转移方程：`dp[i][j] = dp[i+1][j-1], S[i] == S[j]`
+
+​                           `dp[i][j] = 0, S[i] != S[j]`
+
+边界：`dp[i][i] = 1, dp[i][i+1] = (S[i] == S[i+1])?1:0`
+
+```c++
+// 边界
+ans = 1;
+memset(dp, 0, sizeof(dp));
+for(int i = 0;i < len;i++){
+    dp[i][i] = 1;
+    if(i < len - 1){
+        if(S[i] == S[i+1]){
+            dp[i][i+1] = 1;
+            ans = 2;
+        }
+    }
+}
+// 状态转移方程,先计算长度为3的dp值，然后是长度为4,5,....
+for(int L = 3;L <= len;L++){
+    for(int i = 0;i + L - 1 < len;i++){
+        int j = i + L - 1;
+        if(S[i] == S[j] && dp[i+1][j-1] == 1){
+            dp[i][j] = 1;
+            ans = L;
+        }
+    }
+}
+```
+
+#### DAG最长路
+
+```c++
+// 从i号点出发能得到的最长路径,初始化dp数组为0
+int DP(int i){
+    if(dp[i] > 0) return dp[i]; // dp[i]已计算得到
+    for(int j = 0;j < n;j++){
+        if(G[i][j] != INF){
+            dp[i] = max(dp[i], DP(j) + G[i][j]); // 出度为0的点dp[i] = 0
+        }
+    }
+    return dp[i];
+}
+
+// 从i号顶点出发到达终点T能获得的最长路径长度,初始化dp数组为-INF
+int DP(int i){
+    if(vis[i]) return dp[i];
+    vis[i] = true;
+    for(int j = 0;j < n;j++){
+        if(G[i][j] != INF){
+            dp[i] = max(dp[i], DP(j) + G[i][j]); // 边界dp[T] = 0
+        }
+    }
+    return dp[i];
+}
+```
+
+### 背包问题
+
+#### 01背包问题
+
+状态转移方程：`dp[i][v] = max{dp[i-1][v], dp[i-1][v-w[i]]+c[i]} (1 <= i <= n,w[i] <= v <= V)`
+
+边界：`dp[0][v] = 0, 0 <= v <= V`
+
+```c++
+for(int i = 1;i <= n;i++){
+    for(int v = w[i];v <= V;v++){
+        dp[i][v] = max(dp[i-1][v],dp[i-1][v-w[i]] + c[i]);
+    }
+}
+
+// 空间复杂度优化->滚动数组，一维
+for(int i = 1;i <= n;i++){
+    for(int v = V;v >= w[i];v--){ // 注意是逆序！
+        dp[v] = max(dp[v], dp[v-w[i]]+c[i]);
+    }
+}
+```
+
+#### 完全背包问题
+
+状态转移方程：`dp[i][v] = max(dp[i-1][v], dp[i][v-w[i]]+c[i])`
+
+边界：`dp[0][v] = 0`
+
+```c++
+// 一维形式的状态转移方程和10背包问题一模一样，只是用正序遍历V,区分清楚为什么
+for(int i = 1;i <= n;i++){
+    for(int v = w[i];v <= V;v++){
+        dp[v] = max(dp[v], dp[v-w[i]]+c[i]);
     }
 }
 ```
