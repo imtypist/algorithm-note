@@ -805,7 +805,7 @@ for(int j = 1;j <= n;j++){
 // 自底向上
 for(int i = n - 1;i >= 1;i--){
     for(int j = 1;j <= i;j++){
-        d[i][j] = max(dp[i+1][j], dp[i+1][j+1]) + f[i][j];
+        dp[i][j] = max(dp[i+1][j], dp[i+1][j+1]) + f[i][j];
     }
 }
 // print dp[1][1]
