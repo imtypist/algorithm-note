@@ -217,7 +217,7 @@ void mergeSort(int a[]){
     for(int step = 2;step /2 <= n;step *= 2){
         for(int i = 1;i <= n;i += step){
             int mid = i + step / 2 - 1;
-          	if(mid + 1 <= n){
+            if(mid + 1 <= n){
                 merge(a, i, mid, mid+1, min(i+step-1,n));
             }
         }
@@ -236,6 +236,9 @@ void merge(int a[], int L1, int R1, int L2, int R2){
     }
     while(i <= R1) temp[index++] = a[i++];
     while(j <= R2) temp[index++] = a[j++];
+    for(int i = 0;i < index;i++){
+        a[L1+i] = temp[i];
+    }
 }
 ```
 
@@ -251,15 +254,15 @@ void quickSort(int a[], int left, int right){
 }
 
 int partition(int a[], int left, int right){
-  	int temp = a[left];
+    int temp = a[left];
     while(left < right){
         while(left < right && a[right] > temp) right--;
       	a[left] = a[right];
       	while(left < right && a[left] <= temp) left++;
       	a[right] = a[left];
     }
-  	a[left] = temp;
-  	return left;
+    a[left] = temp;
+    return left;
 }
 
 // =>randPartition
@@ -313,7 +316,7 @@ int to_number(int num[]){
 // 最大公约数gcd
 int gcd(int a, int b){
     if(b == 0) return a;
-  	else return gcd(b, a%b);
+    else return gcd(b, a%b);
 }
 
 // 最小公倍数
@@ -327,11 +330,11 @@ int lcm(int a, int b){
 ```c++
 // 1不是素数
 bool isPrime(int a){
-  	if(a <= 1) return false;
-  	int sqr = (int)sqrt(1.0*a);
-    for(int i = 2;i <= sqr;i++){
-        if(a % i == 0) return false;
-    }
+  if(a <= 1) return false;
+  int sqr = (int)sqrt(1.0*a);
+  for(int i = 2;i <= sqr;i++){
+      if(a % i == 0) return false;
+  }
   return true;
 }
 ```
@@ -346,7 +349,7 @@ bool p[maxn] = {0};
 void Find_Prime(){
     for(int i = 2;i < maxn;i++){
         if(p[i] == false){
-          	prime[pNum++] = i;
+            prime[pNum++] = i;
             for(int j = i + i;j < maxn;j += i){
                 p[j] = true;
             }
@@ -364,17 +367,17 @@ struct factor{
 
 if(n % prime[i] == 0){
     fac[num].x = prime[i];
-  	fac[num].cnt = 0;
-  	while(n % prime[i] == 0){
+    fac[num].cnt = 0;
+    while(n % prime[i] == 0){
         fac[num].cnt++;
       	n /= prime[i];
     }
-  	num++;
+    num++;
 }
 
 if(n != 1){
     fac[num].x = n;
-  	fac[num++].cnt = 1;
+    fac[num++].cnt = 1;
 }
 ```
 
@@ -432,7 +435,7 @@ bign sub(bign a, bign b){ // a>=b
 // (n/p + n / p^2 + n / p^3 + ···)
 int cal(int n, int p){
     int ans = 0;
-  	while(n){
+    while(n){
         ans += n / p;
       	n /= p;
     }
@@ -457,8 +460,8 @@ int cal(int n, int p){
 long long res[67][67] = {0};
 long long C(long long n, long long m){
     if(m == 0 || m == n) return 1;
-  	if(res[n][m] != 0) return res[n][m]; // 避免重复计算
-  	return res[n][m] = C(n-1,m) + C(n-1,m-1);
+    if(res[n][m] != 0) return res[n][m]; // 避免重复计算
+    return res[n][m] = C(n-1,m) + C(n-1,m-1);
 }
 
 // 递推
@@ -467,10 +470,10 @@ void calC(){
     for(int i = 1;i <= n;i++){
         res[i][0] = res[i][i] = 1;
     }
-  	for(int i = 2;i <= n;i++){
+    for(int i = 2;i <= n;i++){
         for(int j = 0;j <= i/2;j++){
             res[i][j] = res[i-1][j] + res[i-1][j-1];
-          	res[i][i-j] = res[i][j];
+            res[i][i-j] = res[i][j];
         }
     }
 }
@@ -487,7 +490,7 @@ long long C(long long n, long long m){
   	for(long long i = 1;i <= m; i++){
         ans = ans * (n-m+i) / i; // 一定要先乘再除，保证整除
     }
-  	return ans;
+    return ans;
 }
 ```
 
@@ -648,8 +651,8 @@ void DFS(int index, int sumW, int sumC){
         }
       	return;
     }
-  	DFS(index+1,sumW,sumC);// 不选第index件物品
-  	DFS(index+1,sumW+w[index],sumC+c[index]);
+    DFS(index+1,sumW,sumC);// 不选第index件物品
+    DFS(index+1,sumW+w[index],sumC+c[index]);
 }
 // 优化，剪枝
 void DFS(int index, int sumW, int sumC){
